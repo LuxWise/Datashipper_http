@@ -4,7 +4,8 @@ import { Body, Controller, Post } from '@nestjs/common';
 export class TcpController {
   @Post('data-shipper')
   handleData(@Body() data: any) {
-    console.log('Data: ', data);
+    let dataNumber = 0;
+    console.log(`Data-${dataNumber++}:`, data);
     return { message: 'Data is recived' };
   }
 }
