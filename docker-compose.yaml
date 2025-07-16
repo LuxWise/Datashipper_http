@@ -1,0 +1,7 @@
+services:
+  datashipper:
+    build: .
+    container_name: datashipper
+    ports:
+      - 3000:3000
+    
