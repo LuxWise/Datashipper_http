@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { SimCard } from './sim_card.entity';
 import { Repository } from 'typeorm';
@@ -25,7 +25,12 @@ export class SimCardService {
 
   async update(iccid: string, simData: Partial<SimCard>): Promise<SimCard> {
     const sim = await this.simCardRepository.findOne({ where: { iccid } });
-    const updateSim = this.simCardRepository.merge(sim!, simData);
+
+    if (!sim) {
+      throw new NotFoundException(`SimCard con iccid: ${iccid} no existe`);
+    }
+
+    const updateSim = this.simCardRepository.merge(sim, simData);
     return this.simCardRepository.save(updateSim);
   }
 }
