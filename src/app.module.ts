@@ -4,13 +4,15 @@ import { AppService } from './app.service';
 import { DatashipperModule } from './datashipper/datashipper.module';
 import { DatabaseModule } from './database/database.module';
 import { ConfigModule } from '@nestjs/config';
+import { SimCardModule } from './sim_card/sim_card.module';
 @Module({
   imports: [
     DatashipperModule,
-    DatabaseModule,
     ConfigModule.forRoot({
       isGlobal: true,
     }),
+    DatabaseModule,
+    SimCardModule,
   ],
   controllers: [AppController],
   providers: [AppService],

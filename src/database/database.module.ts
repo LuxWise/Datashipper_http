@@ -14,7 +14,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
         password: config.get('DATABASE_PASSWORD'),
         database: config.get('DATABASE_DATABASE'),
         authSource: 'admin',
-        entities: [],
+        entities: [__dirname + '/../**/*.entity{.ts,.js}'],
         synchronize: true,
         useUnifiedTopology: true,
       }),
