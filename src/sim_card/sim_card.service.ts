@@ -14,21 +14,18 @@ export class SimCardService {
     return this.simCardRepository.find();
   }
 
+  findByIccid(iccid: string): Promise<SimCard[]> {
+    return this.simCardRepository.find({ where: { iccid: iccid } });
+  }
+
   create(sim: Partial<SimCard>): Promise<SimCard> {
     const simCard = this.simCardRepository.create(sim);
     return this.simCardRepository.save(simCard);
   }
 
-  async createTest() {
-    const simCardTest = this.simCardRepository.create({
-      iccid: '123456789012345',
-      company_id: 1,
-      company_code: 'ABC',
-      company: 'Moabits',
-      network: '4G',
-      usage_mb: 250,
-    });
-
-    return await this.simCardRepository.save(simCardTest);
+  async update(iccid: string, simData: Partial<SimCard>): Promise<SimCard> {
+    const sim = await this.simCardRepository.findOne({ where: { iccid } });
+    const updateSim = this.simCardRepository.merge(sim!, simData);
+    return this.simCardRepository.save(updateSim);
   }
 }

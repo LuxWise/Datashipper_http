@@ -5,7 +5,7 @@ import { SimCardService } from 'src/sim_card/sim_card.service';
 export class DatashipperService {
   constructor(private readonly simCardService: SimCardService) {}
 
-  insertData(data: datashiperData) {
+  async insertData(data: datashiperData) {
     for (let i = 0; i < data.notifications.length; i++) {
       const simInfo = data.notifications[i] as {
         iccid: string;
@@ -15,6 +15,15 @@ export class DatashipperService {
         network: string;
         usage_mb: number;
       };
+
+      const simcardExists = await this.simCardService.findByIccid(
+        simInfo.iccid,
+      );
+
+      if (simcardExists) {
+        return this.simCardService.update(simInfo.iccid, simInfo);
+      }
+
       return this.simCardService.create(simInfo);
     }
   }
