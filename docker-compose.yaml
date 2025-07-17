@@ -1,25 +1,50 @@
 services:
+  mongo:
+    image: mongo
+    restart: always
+    container_name: mongo_db
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: admin
+      MONGO_INITDB_ROOT_PASSWORD: adminpassword
+      MONGO_INITDB_DATABASE: mongo
+
+    ports:
+      - "27017:27017"
+    networks:
+      - datashipper_network
+
   datashipper:
     build: .
     container_name: datashipper
+    environment:
+      - DATABASE_HOST=mongo
+      - DATABASE_PORT=27017
+      - DATABASE_USERNAME=admin
+      - DATABASE_PASSWORD=adminpassword
+      - DATABASE_DATABASE=mongo
     ports:
       - 3000:3000
     networks:
       - datashipper_network
-  
-  nginx:
-    image: nginx
-    container_name: nginx
-    ports:
-      - 80:80
-      - 443:443
-    volumes:
-      - ./nginx/default.conf:/etc/nginx/conf.d/default.conf
-      - ./nginx/certs:/etc/nginx/certs
-    networks:
-      - datashipper_network
     depends_on:
-      - datashipper
+      - mongo
+  
+  # nginx:
+  #   image: nginx
+  #   container_name: nginx
+  #   ports:
+  #     - 80:80
+  #     - 443:443
+  #   volumes:
+  #     - ./nginx/default.conf:/etc/nginx/conf.d/default.conf
+  #     - ./nginx/certs:/etc/nginx/certs
+  #   networks:
+  #     - datashipper_network
+  #   depends_on:
+  #     - datashipper
+    
+
+    
 
 networks:
   datashipper_network:
