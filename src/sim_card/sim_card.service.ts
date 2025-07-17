@@ -14,8 +14,8 @@ export class SimCardService {
     return this.simCardRepository.find();
   }
 
-  async findByIccid(iccid: string): Promise<SimCard[]> {
-    return this.simCardRepository.find({ where: { iccid: iccid } });
+  async findByIccid(iccid: string): Promise<SimCard | null> {
+    return await this.simCardRepository.findOne({ where: { iccid } });
   }
 
   create(sim: Partial<SimCard>): Promise<SimCard> {
