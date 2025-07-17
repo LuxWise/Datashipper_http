@@ -14,7 +14,7 @@ export class SimCardService {
     return this.simCardRepository.find();
   }
 
-  findByIccid(iccid: string): Promise<SimCard[]> {
+  async findByIccid(iccid: string): Promise<SimCard[]> {
     return this.simCardRepository.find({ where: { iccid: iccid } });
   }
 
