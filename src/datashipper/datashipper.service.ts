@@ -20,11 +20,10 @@ export class DatashipperService {
         simInfo.iccid,
       );
 
-      if (simcardExists) {
-        return this.simCardService.update(simInfo.iccid, simInfo);
+      if (!simcardExists) {
+        return this.simCardService.create(simInfo);
       }
-
-      return this.simCardService.create(simInfo);
+      return this.simCardService.update(simInfo.iccid, simInfo);
     }
   }
 }
