@@ -16,11 +16,11 @@ export class DatashipperController {
     try {
       await this.datashipperService.insertData(data);
       return { message: 'Data is recived' };
-    } catch {
+    } catch (error) {
       throw new HttpException(
         {
           status: HttpStatus.INTERNAL_SERVER_ERROR,
-          error: 'No se pudo obtener la lista de SimCards',
+          error: `Error to receive data: ${error}`,
         },
         HttpStatus.INTERNAL_SERVER_ERROR,
       );
