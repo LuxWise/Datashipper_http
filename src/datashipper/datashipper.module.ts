@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common';
 import { DatashipperController } from './datashipper.controller';
-import { SimCardModule } from 'src/sim_card/sim_card.module';
+import { SimCardModule } from 'src/simCard/simCard.module';
 import { DatashipperService } from './datashipper.service';
 
 @Module({

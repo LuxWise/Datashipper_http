@@ -1,5 +1,5 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { SimCardService } from './sim_card.service';
+import { SimCardService } from './simCard.service';
 
 describe('SimCardService', () => {
   let service: SimCardService;

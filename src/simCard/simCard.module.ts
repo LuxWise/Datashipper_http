@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { SimCard } from './sim_card.entity';
-import { SimCardService } from './sim_card.service';
+import { SimCard } from './simCard.entity';
+import { SimCardService } from './simCard.service';
 
 @Module({
   imports: [TypeOrmModule.forFeature([SimCard])],
