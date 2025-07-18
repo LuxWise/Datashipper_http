@@ -7,7 +7,7 @@ import {
 } from '@nestjs/common';
 import { DatashipperService } from './datashipper.service';
 
-@Controller('datashipper')
+@Controller()
 export class DatashipperController {
   constructor(private readonly datashipperService: DatashipperService) {}
 

@@ -9,7 +9,7 @@ import {
 import { SimCardService } from './simCard/simCard.service';
 import { SimCard } from './simCard/simCard.entity';
 
-@Controller('datashipper')
+@Controller()
 export class AppController {
   constructor(private readonly simCardServices: SimCardService) {}
 
