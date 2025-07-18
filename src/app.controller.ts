@@ -14,36 +14,25 @@ export class AppController {
   constructor(private readonly simCardServices: SimCardService) {}
 
   @Get()
-  async getData(): Promise<SimCard[]> {
+  async getData(@Query('iccid') iccid?: string): Promise<SimCard[] | SimCard> {
     try {
+      if (iccid) {
+        const sim = await this.simCardServices.findByIccid(iccid);
+        if (!sim) {
+          throw new NotFoundException(
+            `Sim Card with iccid: ${iccid} doesn't exists`,
+          );
+        }
+        return sim;
+      }
+
       const sims = await this.simCardServices.findAll();
       return sims;
     } catch {
       throw new HttpException(
         {
           status: HttpStatus.INTERNAL_SERVER_ERROR,
-          error: 'No se pudo obtener la lista de SimCards',
-        },
-        HttpStatus.INTERNAL_SERVER_ERROR,
-      );
-    }
-  }
-
-  @Get()
-  async getDataByIccid(@Query('iccid') iccid: string): Promise<SimCard> {
-    try {
-      const sim = await this.simCardServices.findByIccid(iccid);
-
-      if (!sim) {
-        throw new NotFoundException(`SimCard con iccid: ${iccid} no existe`);
-      }
-
-      return sim;
-    } catch {
-      throw new HttpException(
-        {
-          status: HttpStatus.INTERNAL_SERVER_ERROR,
-          error: 'No se pudo obtener la lista de SimCards',
+          error: "It can't be done obtain sim card data",
         },
         HttpStatus.INTERNAL_SERVER_ERROR,
       );
