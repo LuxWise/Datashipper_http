@@ -23,8 +23,6 @@ export class DatashipperService {
         simInfo.iccid,
       );
 
-      console.log(simcardExists);
-
       if (!simcardExists) {
         const created = await this.simCardService.create(simInfo);
         results.push({ action: 'created', sim: created });
