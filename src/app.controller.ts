@@ -3,6 +3,7 @@ import {
   Get,
   HttpException,
   HttpStatus,
+  NotFoundException,
   Query,
 } from '@nestjs/common';
 import { SimCardService } from './simCard/simCard.service';
@@ -32,7 +33,12 @@ export class AppController {
   async getDataByIccid(@Query('iccid') iccid: string): Promise<SimCard> {
     try {
       const sim = await this.simCardServices.findByIccid(iccid);
-      return sim!;
+
+      if (!sim) {
+        throw new NotFoundException(`SimCard con iccid: ${iccid} no existe`);
+      }
+
+      return sim;
     } catch {
       throw new HttpException(
         {

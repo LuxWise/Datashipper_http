@@ -16,11 +16,6 @@ export class SimCardService {
 
   async findByIccid(iccid: string): Promise<SimCard | null> {
     const sim = await this.simCardRepository.findOne({ where: { iccid } });
-
-    if (!sim) {
-      throw new NotFoundException(`SimCard con iccid: ${iccid} no existe`);
-    }
-
     return sim;
   }
 
