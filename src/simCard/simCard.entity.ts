@@ -3,7 +3,7 @@ import { Entity, ObjectId, Column, ObjectIdColumn } from 'typeorm';
 @Entity('simcards')
 export class SimCard {
   @ObjectIdColumn()
-  id: ObjectId;
+  _id: ObjectId;
 
   @Column()
   iccid: string;
