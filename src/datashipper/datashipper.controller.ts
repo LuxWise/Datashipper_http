@@ -16,8 +16,13 @@ export class DatashipperController {
   @Post('data')
   async handleData(@Body() data: DatashiperDataDTO, @Req() req: Request) {
     try {
-      const host = req.headers['host'];
-      console.log(`Host: ${host}`);
+      const forwardedFor = req.headers['x-forwarded-for'];
+      const clientIp =
+        typeof forwardedFor === 'string'
+          ? forwardedFor.split(',')[0].trim()
+          : req.socket.remoteAddress;
+
+      console.log(`IP del cliente: ${clientIp}`);
 
       await this.datashipperService.insertData(data);
       return { message: 'Data is recived' };
