@@ -22,7 +22,7 @@ services:
       - DATABASE_PASSWORD=adminpassword
       - DATABASE_DATABASE=mongo
     ports:
-      - 3000:3000
+      - 4000:4000
     networks:
       - datashipper_network
     depends_on:

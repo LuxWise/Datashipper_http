@@ -10,6 +10,6 @@ WORKDIR /app
 COPY --from=build /app/dist ./dist
 COPY package*.json ./
 RUN npm install --frozen-lockfile
-EXPOSE 3000
+EXPOSE 4000
 
 CMD ["node", "dist/main"]
