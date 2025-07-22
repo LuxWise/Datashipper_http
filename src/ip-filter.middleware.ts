@@ -2,7 +2,7 @@ import { Injectable, NestMiddleware } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { Request, Response, NextFunction } from 'express';
 
-const allowedIPs = ['54.93.115.145'];
+const allowedIPs = ['186.28.168.156'];
 
 @Injectable()
 export class IpFilterMiddleware implements NestMiddleware {
@@ -10,6 +10,14 @@ export class IpFilterMiddleware implements NestMiddleware {
 
   use(req: Request, res: Response, next: NextFunction) {
     const ip = req.ip || req.connection.remoteAddress;
+
+    const forwardedFor = req.headers['x-forwarded-for'];
+    const clientIp =
+      typeof forwardedFor === 'string'
+        ? forwardedFor.split(',')[0].trim()
+        : req.socket.remoteAddress;
+
+    console.log(`IP del cliente: ${clientIp}`);
     console.log(ip);
     const isAllowed = allowedIPs.some((allowed) => ip?.includes(allowed));
     const auth = req.headers['api_key'];
