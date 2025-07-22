@@ -13,12 +13,13 @@ export class IpFilterMiddleware implements NestMiddleware {
     const isAllowed = allowedIPs.some((allowed) => ip?.includes(allowed));
     const auth = req.headers['api_key'];
 
-    if (!isAllowed || !auth) {
+    if (!isAllowed && !auth) {
       res.status(403).json({ message: 'Access denied: IP or token required' });
       return;
     }
 
     const api_key = this.config.get<string>('API_KEY');
+    console.log(api_key);
 
     if (auth !== api_key) {
       res.status(403).json({ message: 'Access denied: Invalid API key' });
