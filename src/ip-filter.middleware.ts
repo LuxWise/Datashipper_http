@@ -2,15 +2,13 @@ import { Injectable, NestMiddleware } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { Request, Response, NextFunction } from 'express';
 
-const allowedIPs = ['186.28.168.156'];
+const allowedIPs = ['54.93.115.145', '186.28.168.156'];
 
 @Injectable()
 export class IpFilterMiddleware implements NestMiddleware {
   constructor(private readonly config: ConfigService) {}
 
   use(req: Request, res: Response, next: NextFunction) {
-    const ip = req.ip || req.connection.remoteAddress;
-
     const forwardedFor = req.headers['x-forwarded-for'];
     const clientIp =
       typeof forwardedFor === 'string'
@@ -18,21 +16,27 @@ export class IpFilterMiddleware implements NestMiddleware {
         : req.socket.remoteAddress;
 
     console.log(`IP del cliente: ${clientIp}`);
-    console.log(ip);
-    const isAllowed = allowedIPs.some((allowed) => ip?.includes(allowed));
+
+    const isAllowed = allowedIPs.some((allowed) => clientIp?.includes(allowed));
     const auth = req.headers['api_key'];
+    const validApiKey = this.config.get<string>('API_KEY');
 
     if (!isAllowed && !auth) {
-      console.log(`Not allowed, with IP : ${ip}`);
-      res.status(403).json({ message: 'Access denied: IP or token required' });
-      return;
+      console.log(`Access denied: no IP match and no API key`);
+      return res
+        .status(403)
+        .json({ message: 'Access denied: IP or token required' });
     }
 
-    const api_key = this.config.get<string>('API_KEY');
+    if (isAllowed) {
+      return next();
+    }
 
-    if (auth !== api_key) {
-      res.status(403).json({ message: 'Access denied: Invalid API key' });
-      return;
+    if (auth !== validApiKey) {
+      console.log(`Access denied: invalid API key`);
+      return res
+        .status(403)
+        .json({ message: 'Access denied: Invalid API key' });
     }
 
     next();
