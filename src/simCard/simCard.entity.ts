@@ -15,7 +15,7 @@ export class SimCard {
   company_code: string;
 
   @Column()
-  company_name: string;
+  company: string;
 
   @Column()
   connect_time: string;

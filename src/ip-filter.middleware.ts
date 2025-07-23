@@ -7,7 +7,7 @@ const allowedIPs = ['54.93.115.145', '186.28.168.156'];
 const normalizeIp = (ip: string | undefined): string | undefined => {
   if (!ip) return undefined;
   if (ip.startsWith('::ffff:')) {
-    return ip.split(':').pop(); // Extrae la IPv4 real
+    return ip.split(':').pop();
   }
   return ip;
 };
@@ -24,9 +24,6 @@ export class IpFilterMiddleware implements NestMiddleware {
         : req.socket.remoteAddress;
 
     const clientIp = normalizeIp(rawIp);
-
-    console.log(`IP del cliente: ${clientIp}`);
-
     const isAllowed = allowedIPs.includes(clientIp || '');
     const auth = req.headers['api_key'];
     const validApiKey = this.config.get<string>('API_KEY');
