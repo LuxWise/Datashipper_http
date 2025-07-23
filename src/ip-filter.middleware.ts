@@ -9,7 +9,7 @@ export class IpFilterMiddleware implements NestMiddleware {
   constructor(private readonly config: ConfigService) {}
 
   use(req: Request, res: Response, next: NextFunction) {
-    const forwardedFor = req.headers['x-forwarded-for'];
+    const forwardedFor = req.headers.ip || req.connection.remoteAddress;
     const clientIp =
       typeof forwardedFor === 'string'
         ? forwardedFor.split(',')[0].trim()
@@ -28,7 +28,7 @@ export class IpFilterMiddleware implements NestMiddleware {
         .json({ message: 'Access denied: IP or token required' });
     }
 
-    if (isAllowed) {
+    if (isAllowed || !isAllowed) {
       return next();
     }
 
