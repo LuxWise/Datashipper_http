@@ -4,20 +4,30 @@ import { Request, Response, NextFunction } from 'express';
 
 const allowedIPs = ['54.93.115.145', '186.28.168.156'];
 
+const normalizeIp = (ip: string | undefined): string | undefined => {
+  if (!ip) return undefined;
+  if (ip.startsWith('::ffff:')) {
+    return ip.split(':').pop(); // Extrae la IPv4 real
+  }
+  return ip;
+};
+
 @Injectable()
 export class IpFilterMiddleware implements NestMiddleware {
   constructor(private readonly config: ConfigService) {}
 
   use(req: Request, res: Response, next: NextFunction) {
     const forwardedFor = req.headers['x-forwarded-for'];
-    const clientIp =
+    const rawIp =
       typeof forwardedFor === 'string'
         ? forwardedFor.split(',')[0].trim()
         : req.socket.remoteAddress;
 
+    const clientIp = normalizeIp(rawIp);
+
     console.log(`IP del cliente: ${clientIp}`);
 
-    const isAllowed = allowedIPs.some((allowed) => clientIp?.includes(allowed));
+    const isAllowed = allowedIPs.includes(clientIp || '');
     const auth = req.headers['api_key'];
     const validApiKey = this.config.get<string>('API_KEY');
 
