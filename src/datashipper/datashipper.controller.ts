@@ -23,6 +23,7 @@ export class DatashipperController {
           : req.socket.remoteAddress;
 
       console.log(clientIp);
+      console.log(data);
       await this.datashipperService.insertData(data);
       return { message: 'Data is recived' };
     } catch (error) {
